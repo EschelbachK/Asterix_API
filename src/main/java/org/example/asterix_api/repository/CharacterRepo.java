@@ -1,5 +1,6 @@
 package org.example.asterix_api.repository;
 
+import org.example.asterix_api.model.Character;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
