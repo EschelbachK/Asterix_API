@@ -1,20 +1,30 @@
 package org.example.asterix_api.service;
 
+import org.example.asterix_api.dto.CharacterDTO;
 import org.example.asterix_api.model.Character;
 import org.example.asterix_api.repository.CharacterRepo;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
-public class AsterixService {
+public class CharacterService {
 
     private final CharacterRepo repo;
+    private final IdService idService;
 
-    public AsterixService(CharacterRepo repo) {
+    public CharacterService(CharacterRepo repo, IdService idService) {
         this.repo = repo;
+        this.idService = idService;
     }
 
-    public Character addCharacter(Character character) {
+    public Character addCharacter(CharacterDTO dto) {
+        Character character = new Character(
+                idService.generateId(),
+                dto.name(),
+                dto.age(),
+                dto.profession()
+        );
         return repo.save(character);
     }
 

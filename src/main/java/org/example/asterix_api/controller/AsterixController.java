@@ -1,7 +1,8 @@
 package org.example.asterix_api.controller;
 
+import org.example.asterix_api.dto.CharacterDTO;
 import org.example.asterix_api.model.Character;
-import org.example.asterix_api.service.AsterixService;
+import org.example.asterix_api.service.CharacterService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,15 +11,15 @@ import java.util.List;
 @RequestMapping("/asterix")
 public class AsterixController {
 
-    private final AsterixService service;
+    private final CharacterService service;
 
-    public AsterixController(AsterixService service) {
+    public AsterixController(CharacterService service) {
         this.service = service;
     }
 
     @PostMapping("/characters")
-    public Character addCharacter(@RequestBody Character character) {
-        return service.addCharacter(character);
+    public Character addCharacter(@RequestBody CharacterDTO dto) {
+        return service.addCharacter(dto);
     }
 
     @GetMapping("/characters")
@@ -38,6 +39,6 @@ public class AsterixController {
 
     @DeleteMapping("/characters/{id}")
     public void deleteCharacter(@PathVariable String id) {
-       service.deleteCharacter(id);
+        service.deleteCharacter(id);
     }
 }
