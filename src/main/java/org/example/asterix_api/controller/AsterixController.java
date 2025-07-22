@@ -16,15 +16,37 @@ public class AsterixController {
         this.characterRepo = characterRepo;
     }
 
-    // POST: Charakter speichern
     @PostMapping("/characters")
     public Character addCharacter(@RequestBody Character character) {
         return characterRepo.save(character);
     }
 
-    // GET: Alle Charaktere abrufen
     @GetMapping("/characters")
-    public List<Character> getCharacters() {
+    public List<Character> getAllCharacters() {
         return characterRepo.findAll();
+    }
+
+    @GetMapping("/characters/{id}")
+    public Character getCharacterById(@PathVariable String id) {
+        return characterRepo.findById(id).orElse(null);
+    }
+
+    @PutMapping("/characters/{id}")
+    public Character updateCharacter(@PathVariable String id, @RequestBody Character character) {
+        Character existing = characterRepo.findById(id).orElse(null);
+        if (existing != null) {
+            return characterRepo.save(
+                    existing
+                            .withName(character.getName())
+                            .withAge(character.getAge())
+                            .withProfession(character.getProfession())
+            );
+        }
+        return null;
+    }
+
+    @DeleteMapping("/characters/{id}")
+    public void deleteCharacter(@PathVariable String id) {
+        characterRepo.deleteById(id);
     }
 }

@@ -1,9 +1,11 @@
 package org.example.asterix_api.model;
 
 import lombok.Getter;
+import lombok.With;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@With
 @Getter
 @Document("characters")
 public class Character {
