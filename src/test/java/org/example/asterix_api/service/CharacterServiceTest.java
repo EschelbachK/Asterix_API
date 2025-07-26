@@ -3,6 +3,7 @@ package org.example.asterix_api.service;
 import org.example.asterix_api.dto.CharacterDTO;
 import org.example.asterix_api.model.Character;
 import org.example.asterix_api.repository.CharacterRepo;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -14,17 +15,19 @@ import static org.mockito.Mockito.*;
 
 class CharacterServiceTest {
 
+    private CharacterRepo mockRepo;
+    private IdService mockIdService;
+    private CharacterService service;
+
+    @BeforeEach
+    void setUp() {
+        mockRepo = Mockito.mock(CharacterRepo.class);
+        mockIdService = Mockito.mock(IdService.class);
+        service = new CharacterService(mockRepo, mockIdService);
+    }
+
     @Test
     void getAllCharacters() {
-
-        // Mock für Repository erstellen
-        CharacterRepo mockRepo = Mockito.mock(CharacterRepo.class);
-        // Mock für IdService erstellen, weil es im Konstruktor steht
-        IdService mockIdService = Mockito.mock(IdService.class);
-
-        // Service mit beiden Mocks erstellen
-        CharacterService service = new CharacterService(mockRepo, mockIdService);
-
         // GIVEN
         List<Character> expected = List.of(
                 new Character("1", "Asterix", 30, "Warrior"),
@@ -37,15 +40,11 @@ class CharacterServiceTest {
 
         // THEN
         assertEquals(expected, actual);
-        verify(mockRepo, times(1)).findAll();
+        verify(mockRepo).findAll();
     }
 
     @Test
     void getCharacterById() {
-        CharacterRepo mockRepo = Mockito.mock(CharacterRepo.class);
-        IdService mockIdService = Mockito.mock(IdService.class);
-        CharacterService service = new CharacterService(mockRepo, mockIdService);
-
         // GIVEN
         Character character = new Character("1", "Asterix", 30, "Warrior");
         when(mockRepo.findById("1")).thenReturn(Optional.of(character));
@@ -60,10 +59,6 @@ class CharacterServiceTest {
 
     @Test
     void updateCharacter() {
-        CharacterRepo mockRepo = Mockito.mock(CharacterRepo.class);
-        IdService mockIdService = Mockito.mock(IdService.class);
-        CharacterService service = new CharacterService(mockRepo, mockIdService);
-
         // GIVEN
         Character oldCharacter = new Character("1", "Asterix", 30, "Warrior");
         Character updateData = new Character(null, "Asterix Updated", 31, "Chief");
@@ -82,10 +77,6 @@ class CharacterServiceTest {
 
     @Test
     void deleteCharacter() {
-        CharacterRepo mockRepo = Mockito.mock(CharacterRepo.class);
-        IdService mockIdService = Mockito.mock(IdService.class);
-        CharacterService service = new CharacterService(mockRepo, mockIdService);
-
         // WHEN
         service.deleteCharacter("1");
 
@@ -95,13 +86,6 @@ class CharacterServiceTest {
 
     @Test
     void addCharacter_shouldGenerateIdAndSave() {
-        // Mocks erstellen
-        CharacterRepo mockRepo = Mockito.mock(CharacterRepo.class);
-        IdService mockIdService = Mockito.mock(IdService.class);
-
-        // Service mit Mocks erstellen
-        CharacterService service = new CharacterService(mockRepo, mockIdService);
-
         // GIVEN
         String generatedId = "random-id-123";
         when(mockIdService.generateId()).thenReturn(generatedId);
@@ -123,5 +107,4 @@ class CharacterServiceTest {
         verify(mockIdService, times(1)).generateId();
         verify(mockRepo, times(1)).save(any(Character.class));
     }
-
 }
