@@ -1,7 +1,7 @@
 package org.example.asterix_api.service;
 
 import org.example.asterix_api.dto.CharacterDTO;
-import org.example.asterix_api.model.Character;
+import org.example.asterix_api.model.AsterixCharacter;
 import org.example.asterix_api.repository.CharacterRepo;
 import org.springframework.stereotype.Service;
 
@@ -18,32 +18,32 @@ public class CharacterService {
         this.idService = idService;
     }
 
-    public Character addCharacter(CharacterDTO dto) {
-        Character character = new Character(
+    public AsterixCharacter addCharacter(CharacterDTO dto) {
+        AsterixCharacter asterixCharacter = new AsterixCharacter(
                 idService.generateId(),
                 dto.name(),
                 dto.age(),
                 dto.profession()
         );
-        return repo.save(character);
+        return repo.save(asterixCharacter);
     }
 
-    public List<Character> getAllCharacters() {
+    public List<AsterixCharacter> getAllCharacters() {
         return repo.findAll();
     }
 
-    public Character getCharacterById(String id) {
+    public AsterixCharacter getCharacterById(String id) {
         return repo.findById(id).orElse(null);
     }
 
-    public Character updateCharacter(String id, Character character) {
-        Character existing = repo.findById(id).orElse(null);
+    public AsterixCharacter updateCharacter(String id, AsterixCharacter asterixCharacter) {
+        AsterixCharacter existing = repo.findById(id).orElse(null);
         if (existing != null) {
             return repo.save(
                     existing
-                            .withName(character.getName())
-                            .withAge(character.getAge())
-                            .withProfession(character.getProfession())
+                            .withName(asterixCharacter.getName())
+                            .withAge(asterixCharacter.getAge())
+                            .withProfession(asterixCharacter.getProfession())
             );
         }
         return null;

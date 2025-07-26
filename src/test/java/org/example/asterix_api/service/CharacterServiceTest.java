@@ -1,7 +1,7 @@
 package org.example.asterix_api.service;
 
 import org.example.asterix_api.dto.CharacterDTO;
-import org.example.asterix_api.model.Character;
+import org.example.asterix_api.model.AsterixCharacter;
 import org.example.asterix_api.repository.CharacterRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,14 +29,14 @@ class CharacterServiceTest {
     @Test
     void getAllCharacters() {
         // GIVEN
-        List<Character> expected = List.of(
-                new Character("1", "Asterix", 30, "Warrior"),
-                new Character("2", "Obelix", 35, "Strongman")
+        List<AsterixCharacter> expected = List.of(
+                new AsterixCharacter("1", "Asterix", 30, "Warrior"),
+                new AsterixCharacter("2", "Obelix", 35, "Strongman")
         );
         when(mockRepo.findAll()).thenReturn(expected);
 
         // WHEN
-        List<Character> actual = service.getAllCharacters();
+        List<AsterixCharacter> actual = service.getAllCharacters();
 
         // THEN
         assertEquals(expected, actual);
@@ -46,33 +46,33 @@ class CharacterServiceTest {
     @Test
     void getCharacterById() {
         // GIVEN
-        Character character = new Character("1", "Asterix", 30, "Warrior");
-        when(mockRepo.findById("1")).thenReturn(Optional.of(character));
+        AsterixCharacter asterixCharacter = new AsterixCharacter("1", "Asterix", 30, "Warrior");
+        when(mockRepo.findById("1")).thenReturn(Optional.of(asterixCharacter));
 
         // WHEN
-        Character actual = service.getCharacterById("1");
+        AsterixCharacter actual = service.getCharacterById("1");
 
         // THEN
-        assertEquals(character, actual);
+        assertEquals(asterixCharacter, actual);
         verify(mockRepo).findById("1");
     }
 
     @Test
     void updateCharacter() {
         // GIVEN
-        Character oldCharacter = new Character("1", "Asterix", 30, "Warrior");
-        Character updateData = new Character(null, "Asterix Updated", 31, "Chief");
-        Character updatedCharacter = new Character("1", "Asterix Updated", 31, "Chief");
+        AsterixCharacter oldAsterixCharacter = new AsterixCharacter("1", "Asterix", 30, "Warrior");
+        AsterixCharacter updateData = new AsterixCharacter(null, "Asterix Updated", 31, "Chief");
+        AsterixCharacter updatedAsterixCharacter = new AsterixCharacter("1", "Asterix Updated", 31, "Chief");
 
-        when(mockRepo.findById("1")).thenReturn(Optional.of(oldCharacter));
-        when(mockRepo.save(any(Character.class))).thenReturn(updatedCharacter);
+        when(mockRepo.findById("1")).thenReturn(Optional.of(oldAsterixCharacter));
+        when(mockRepo.save(any(AsterixCharacter.class))).thenReturn(updatedAsterixCharacter);
 
         // WHEN
-        Character actual = service.updateCharacter("1", updateData);
+        AsterixCharacter actual = service.updateCharacter("1", updateData);
 
         // THEN
-        assertEquals(updatedCharacter, actual);
-        verify(mockRepo).save(any(Character.class));
+        assertEquals(updatedAsterixCharacter, actual);
+        verify(mockRepo).save(any(AsterixCharacter.class));
     }
 
     @Test
@@ -92,11 +92,11 @@ class CharacterServiceTest {
 
         CharacterDTO dto = new CharacterDTO("Asterix", 30, "Warrior");
 
-        Character savedCharacter = new Character(generatedId, "Asterix", 30, "Warrior");
-        when(mockRepo.save(any(Character.class))).thenReturn(savedCharacter);
+        AsterixCharacter savedAsterixCharacter = new AsterixCharacter(generatedId, "Asterix", 30, "Warrior");
+        when(mockRepo.save(any(AsterixCharacter.class))).thenReturn(savedAsterixCharacter);
 
         // WHEN
-        Character actual = service.addCharacter(dto);
+        AsterixCharacter actual = service.addCharacter(dto);
 
         // THEN
         assertEquals(generatedId, actual.getId());
@@ -105,6 +105,6 @@ class CharacterServiceTest {
         assertEquals(dto.profession(), actual.getProfession());
 
         verify(mockIdService, times(1)).generateId();
-        verify(mockRepo).save(any(Character.class));
+        verify(mockRepo).save(any(AsterixCharacter.class));
     }
 }
