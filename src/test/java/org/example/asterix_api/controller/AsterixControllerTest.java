@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 // Importiere MockMvc für Web-Tests
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -88,6 +89,44 @@ class AsterixControllerTest {
                             "name": "Asterix",
                             "age": 35,
                             "profession": "Krieger"
+                        }
+                        """
+                ));
+    }
+
+    @Test
+// Teste, ob ein neuer Charakter hinzugefügt werden kann
+    void addCharacter_shouldReturnSavedCharacter() throws Exception {
+        // Führe eine POST-Anfrage an den Endpoint /asterix/characters aus
+        // Dabei wird JSON direkt im Body der Anfrage mitgesendet
+        mockMvc.perform(MockMvcRequestBuilders.post("/asterix/characters")
+                        // Setze den Content-Type Header auf "application/json"
+                        // Das sagt dem Server, dass der Body JSON enthält
+                        .contentType(MediaType.APPLICATION_JSON)
+                        // Füge den JSON-Body direkt als String ein (ohne vorherige Variable)
+                        // Das simuliert das Senden von {name, age, profession} an den Server
+                        .content("""
+                    {
+                        "name": "Miraculix",
+                        "age": 60,
+                        "profession": "Druide"
+                    }
+                    """))
+                // Erwarte, dass die Antwort vom Server den HTTP Status 200 OK zurückgibt
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // Erwarte, dass im JSON-Response ein Feld "id" vorhanden ist und nicht leer ist
+                // Das zeigt, dass der Server eine ID generiert und zurücksendet (z.B. UUID)
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNotEmpty())
+                // Erwarte, dass der JSON-Response mindestens die angegebenen Felder enthält
+                // Hier wird der gesamte JSON-Response mit dem angegebenen JSON verglichen
+                // Achtung: Dies prüft nur, ob diese Felder im Response sind (nicht strikt gleich),
+                // aber es prüft nicht die "id", deshalb ist diese Prüfung zusätzlich wichtig
+                .andExpect(MockMvcResultMatchers.content().json(
+                        """
+                        {
+                            "name": "Miraculix",
+                            "age": 60,
+                            "profession": "Druide"
                         }
                         """
                 ));
