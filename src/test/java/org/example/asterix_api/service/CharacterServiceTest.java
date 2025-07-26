@@ -54,7 +54,7 @@ class CharacterServiceTest {
 
         // THEN
         assertEquals(character, actual);
-        verify(mockRepo, times(1)).findById("1");
+        verify(mockRepo).findById("1");
     }
 
     @Test
@@ -81,7 +81,7 @@ class CharacterServiceTest {
         service.deleteCharacter("1");
 
         // THEN
-        verify(mockRepo, times(1)).deleteById("1");
+        verify(mockRepo).deleteById("1");
     }
 
     @Test
@@ -105,6 +105,6 @@ class CharacterServiceTest {
         assertEquals(dto.profession(), actual.getProfession());
 
         verify(mockIdService, times(1)).generateId();
-        verify(mockRepo, times(1)).save(any(Character.class));
+        verify(mockRepo).save(any(Character.class));
     }
 }
