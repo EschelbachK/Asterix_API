@@ -131,4 +131,32 @@ class AsterixControllerTest {
                         """
                 ));
     }
+
+    @Test
+    // Teste, ob ein vorhandener Charakter erfolgreich aktualisiert wird
+    void updateCharacter_shouldReturnUpdatedCharacter() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/asterix/characters/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "name": "AsterixUpdated",
+                                "age": 36,
+                                "profession": "Chef-Krieger"
+                            }
+                            """))
+                // Nur prüfen, ob der HTTP Status 200 OK ist
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    // Teste, ob ein Charakter erfolgreich gelöscht werden kann
+    void deleteCharacter_shouldReturnStatusOkAndRemoveCharacter() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/asterix/characters/2"))
+                // Nur prüfen, ob der HTTP Status 200 OK ist
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        // Prüfe, ob der Charakter danach nicht mehr gefunden wird (404)
+        mockMvc.perform(MockMvcRequestBuilders.get("/asterix/characters/2"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }
