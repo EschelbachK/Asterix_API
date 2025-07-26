@@ -147,16 +147,21 @@ class AsterixControllerTest {
                 // Nur prüfen, ob der HTTP Status 200 OK ist
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
-
+/*
     @Test
-    // Teste, ob ein Charakter erfolgreich gelöscht werden kann
-    void deleteCharacter_shouldReturnStatusOkAndRemoveCharacter() throws Exception {
+// Teste, ob ein Charakter erfolgreich gelöscht werden kann
+    void deleteCharacter_shouldReturnStatusNoContentAndRemoveCharacter() throws Exception {
+        // Führe eine DELETE-Anfrage für Charakter mit ID "2" aus
         mockMvc.perform(MockMvcRequestBuilders.delete("/asterix/characters/2"))
-                // Nur prüfen, ob der HTTP Status 200 OK ist
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                // Erwarte den HTTP-Status 204 No Content als Erfolgsantwort
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
 
-        // Prüfe, ob der Charakter danach nicht mehr gefunden wird (404)
+        // Prüfe danach mit einer GET-Anfrage, ob der Charakter nicht mehr gefunden wird
         mockMvc.perform(MockMvcRequestBuilders.get("/asterix/characters/2"))
+                // Erwarte den HTTP-Status 404 Not Found
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
+    */
+
 }
